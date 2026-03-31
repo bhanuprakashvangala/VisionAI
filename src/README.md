@@ -1,65 +1,30 @@
-# README for `src` Directory
+# VisionAI Source Directory
 
-## 📌 Overview
-This directory contains the core Python scripts for the **VisionAI** system. The scripts handle **image processing, speech recognition, real-time information retrieval, and AI-driven scene analysis.**
-
-## 📂 File Structure
+## Structure
 ```
 src/
-│-- VisionAI.py            # Main script for processing inputs and generating responses
-│-- visualizations.py      # Visualization utilities for image and audio analysis
-│-- README.md              # This README file
+├── VisionAI.py              # Legacy entry point
+├── visualizations.py        # Flowchart generation utility
+└── visionai/                # Core package
+    ├── config.py            # Environment-based configuration
+    ├── models.py            # Lazy-loaded AI model management
+    ├── input_handler.py     # Voice & text input
+    ├── location.py          # IP-based geolocation
+    ├── image_processing.py  # Image analysis (BLIP-2 + LLaMA-2)
+    ├── realtime_info.py     # SerpAPI integration (Maps & News)
+    ├── audio.py             # TTS generation & SNR evaluation
+    └── pipeline.py          # Main pipeline & CLI entry point
 ```
 
-## 🔧 Installation of Required Libraries
-Before running the scripts, install the necessary dependencies:
-
+## Running
 ```sh
-pip install torch transformers speechrecognition geocoder requests opencv-python numpy matplotlib pillow TTS scipy
-```
+# From the src/ directory:
+python -m visionai.pipeline [image_path] [-v]
 
-### Additional Dependencies
-Some additional dependencies may be required for specific functionalities:
-
-- **GPU Acceleration:** Install `torch` with CUDA support:
-  ```sh
-  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-  ```
-- **For Text-to-Speech (TTS) Support:**
-  ```sh
-  pip install TTS
-  ```
-
-## 🚀 Usage
-### Running the Main Script
-```sh
+# Or using the legacy entry point:
 python VisionAI.py
 ```
 
-### Expected Inputs & Outputs
-1. **User Inputs:**
-   - Voice or text input
-   - Image files for scene analysis
-2. **Processing:**
-   - Scene analysis using BLIP-2
-   - Text generation using LLaMA-2
-   - Real-time information retrieval from Google Maps & News APIs
-3. **Outputs:**
-   - AI-generated response (text & audio)
-   - Processed images and analysis results
-
-## 🛠️ Features Implemented
-- Image processing (edge detection, enhancement, histogram generation)
-- Scene description generation (BLIP-2, LLaMA-2)
-- Speech recognition and AI-based response generation
-- Real-time hazard detection from Google Maps & News APIs
-- Audio clarity evaluation using **Signal-to-Noise Ratio (SNR)** and spectrograms
-
-## 📝 Notes
-- Ensure that API keys are correctly configured in `VisionAI.py` before running the script.
-- Outputs are saved in the `output/` directory.
-
-## 📬 Contact
-For queries, reach out to **Bhanu Prakash Vangala** via GitHub Issues or Email.
-
-
+## Configuration
+API keys are loaded from environment variables (see `.env.example` in the project root).
+Never hardcode API keys in source files.
