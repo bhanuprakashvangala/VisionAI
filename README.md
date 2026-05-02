@@ -1,88 +1,110 @@
 # VisionAI: Emergency Assistance for the Visually Impaired
 
-## 🚀 Overview
-**VisionAI** is an AI-powered assistive system designed to provide **real-time hazard alerts and emergency insights** for visually impaired individuals. It processes **pre-recorded video** or **image inputs**, detects hazards, extracts text, and generates real-time AI-powered alerts using multimodal AI techniques.
+## Overview
+**VisionAI** is an AI-powered assistive system designed to provide **real-time hazard alerts and emergency insights** for visually impaired individuals. It processes images, detects hazards, and generates real-time AI-powered alerts using multimodal AI techniques.
 
-## 🌟 Features
-- **📷 Scene Understanding:** Uses **BLIP-2** and **LLaMA-2** to analyze images and generate detailed descriptions.
-- **📰 Real-time Hazard Alerts:** Fetches **Google Maps data** and **news updates** for potential dangers in the user’s vicinity.
-- **🎤 Voice Interaction:** Accepts **voice commands** and generates **speech-based responses**.
-- **📍 Location Awareness:** Detects user location and retrieves **hazard-related information**.
-- **🗣️ AI-powered Speech Response:** Converts AI-generated insights into **clear, natural-sounding speech**.
-- **🎵 Audio Clarity Evaluation:** Uses **Signal-to-Noise Ratio (SNR)** and **spectrogram analysis** to assess audio quality.
+## Features
+- **Scene Understanding:** Uses **BLIP-2** and **LLaMA-2** to analyze images and generate detailed descriptions.
+- **Real-time Hazard Alerts:** Fetches **Google Maps data** and **news updates** for potential dangers in the user's vicinity.
+- **Voice Interaction:** Accepts **voice commands** and generates **speech-based responses**.
+- **Location Awareness:** Detects user location and retrieves **hazard-related information**.
+- **AI-powered Speech Response:** Converts AI-generated insights into **clear, natural-sounding speech**.
+- **Audio Clarity Evaluation:** Uses **Signal-to-Noise Ratio (SNR)** and **spectrogram analysis** to assess audio quality.
 
-## 🛠️ Technologies Used
-- **Python, OpenAI’s Transformers, PyTorch**
-- **BLIP-2, LLaMA-2 for image understanding & language processing**
-- **Speech Recognition (Google Speech API)**
-- **Google Maps API & Google News API for real-time hazard detection**
-- **Computer Vision (OpenCV, skimage)**
-- **Text-to-Speech (TTS) Model for audio output**
-- **Matplotlib, NumPy, SciPy for audio analysis**
+## Technologies Used
+- **Python 3.8+**, **PyTorch**, **Hugging Face Transformers**
+- **BLIP-2** (image captioning), **LLaMA-2** (language generation)
+- **Speech Recognition** (Google Speech API)
+- **SerpAPI** (Google Maps & Google News for real-time hazard detection)
+- **OpenCV**, **scikit-image** (computer vision)
+- **TTS** (Text-to-Speech for audio output)
+- **Matplotlib**, **NumPy**, **SciPy** (analysis & visualization)
 
-## 🔧 Installation
+## Project Structure
+```
+VisionAI/
+├── .env.example              # Environment variable template
+├── .gitignore                # Git ignore rules
+├── requirements.txt          # Python dependencies
+├── conftest.py               # Pytest configuration
+├── README.md
+├── src/
+│   ├── VisionAI.py           # Entry point (backwards-compatible)
+│   ├── visualizations.py     # Flowchart generation
+│   └── visionai/             # Core package
+│       ├── __init__.py
+│       ├── config.py          # Configuration & environment variables
+│       ├── models.py          # Lazy model loading & management
+│       ├── input_handler.py   # Voice & text input handling
+│       ├── location.py        # Geolocation retrieval
+│       ├── image_processing.py# Image analysis & scene understanding
+│       ├── realtime_info.py   # Real-time Maps & News API queries
+│       ├── audio.py           # TTS & audio quality evaluation
+│       └── pipeline.py        # Main pipeline orchestration
+└── tests/
+    ├── test_config.py
+    ├── test_image_processing.py
+    ├── test_audio.py
+    └── test_pipeline.py
+```
+
+## Installation
+
 ### Prerequisites
-Make sure you have the following installed:
 - Python 3.8+
-- CUDA-enabled GPU (for faster inference, optional)
-- Virtual environment (recommended)
+- CUDA-enabled GPU (optional, for faster inference)
 
-### Step 1: Clone the Repository
+### Setup
 ```sh
 git clone https://github.com/bhanuprakashvangala/VisionAI.git
 cd VisionAI
-```
-
-### Step 2: Create a Virtual Environment
-```sh
-python -m venv visionai_env
-source visionai_env/bin/activate  # For Linux/macOS
-visionai_env\Scripts\activate  # For Windows
-```
-
-### Step 3: Install Dependencies
-```sh
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+# venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 ```
 
-## 🎯 Usage
+### Configuration
+Copy the environment template and fill in your API keys:
+```sh
+cp .env.example .env
+```
+
+Edit `.env` with your credentials:
+```
+HF_TOKEN=your_huggingface_token_here
+SERP_API_KEY=your_serpapi_key_here
+```
+
+> **Important:** Never commit your `.env` file. It is excluded via `.gitignore`.
+
+## Usage
+
 ### Run VisionAI
 ```sh
-python VisionAI.py
+cd src
+python -m visionai.pipeline input.jpg
+```
+
+Or with verbose logging:
+```sh
+python -m visionai.pipeline input.jpg --verbose
 ```
 
 ### How it Works
-1. **User Input:** 
-   - Upload an image OR speak/type a question.
-2. **Scene Analysis:** 
-   - BLIP-2 processes the image and generates a description.
-   - LLaMA-2 enhances the generated description.
-3. **Real-time Hazard Detection:** 
-   - Queries **Google Maps** and **Google News** for relevant alerts.
-4. **AI Response:** 
-   - Generates an answer based on the image context.
-   - Converts the response into speech.
-5. **Audio Clarity Evaluation:** 
-   - Evaluates the generated audio’s **signal-to-noise ratio (SNR)**.
+1. **User Input:** Upload an image, then speak or type a question.
+2. **Scene Analysis:** BLIP-2 processes the image; LLaMA-2 enhances the description.
+3. **Real-time Hazard Detection:** Queries Google Maps and News for relevant alerts.
+4. **AI Response:** Generates an answer based on the image context.
+5. **Audio Output:** Converts the response into speech with quality evaluation.
 
-### Example Output
-- **Image Input:** `input.jpg`
-- **Generated Scene Description:**
-  ```
-  This image shows a busy intersection with pedestrian crossings. There are vehicles approaching from the left, and a traffic signal is visible. Pedestrians are waiting at the crosswalk.
-  ```
-- **Real-time Updates:**
-  ```
-  📍 Location Insight: Nearby hazards detected - Heavy traffic congestion.
-  📰 Latest News: Severe weather conditions expected today.
-  ```
-- **Audio Clarity Analysis:**
-  ```
-  🔹 SNR: 30.5 dB (Good quality audio)
-  ```
+### Running Tests
+```sh
+python -m pytest tests/ -v
+```
 
-## 📜 License
+## License
 This project is licensed under the **MIT License**.
 
-## 🤝 Contributing
-Contributions are welcome! If you want to improve this project, please fork the repository and submit a pull request.
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
